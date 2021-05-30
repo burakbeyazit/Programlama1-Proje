@@ -1,0 +1,287 @@
+#include<stdio.h>        
+#include<stdlib.h>       
+#include<conio.h>				// Kullandigimiz library'ler.
+#include<string.h>
+#include<Windows.h>
+
+
+struct palandoken  				//Palandoken'deki otelimiz icin kullandigimiz struct.
+
+{
+	char tcNo1[15];  
+	char adSoyad1[15];
+	int odaNo1;
+	char email1[99];
+	struct palandoken *following1;
+}
+*temp1, *temp2;
+struct palandoken *dummy1;
+
+struct fethiye					//Fethiye'deki otelimiz icin kullandigimiz struct.
+
+{
+	char tcNo2[15];  
+	char adSoyad2[15];
+	int odaNo2;
+	char email2[99];
+	struct fethiye *following2;
+}
+*temp3, *temp4;
+struct fethiye *dummy2;
+
+int main()    
+{
+	int rezervasyon(int x), kayitIptal(), kayitGoster();  //Proje dahilinde kullandigimiz fonksiyonlar
+	int secim;
+	temp1 = temp2 = NULL;  //Struct'in icindeki degerlerin ilk degerlerini NULL'a atiyoruz. 
+	int num = 1;
+	do
+	{
+		                
+		printf("\n\n\t\t =====================================================================");
+		printf("\n\t\t                   	PROGRAMA HOSGELDINIZ                  ");
+		printf("\n\t\t =====================================================================");
+		printf("\n\n\n\t\t Yapmak istediginiz islem icin gerekli numarayi tuslayiniz. (1-4):");
+		printf("\n\n\t\t 1. Rezervasyon Islemleri");
+		printf("\n\n\t\t 2. Rezervasyon Iptal Islemleri");
+		printf("\n\n\t\t 3. Kayitli Rezervasyon Goster");
+		printf("\n\n\t\t 4. CIKIS");
+
+		scanf("%d", &secim); fflush(stdin);
+		system("cls");  
+
+switch (secim)  
+		{
+		case 1:
+			rezervasyon(num); 
+			num++;          
+			break;      
+		case 2:
+			kayitIptal();
+			break;
+		case 3:
+			kayitGoster();
+			break;
+
+		Default:  
+			printf("\n\n\t Yanlis secim");
+			printf("\n\n\t Lutfen 1-4 arasinda bir numara tuslayiniz.");	
+		}
+		getch();     
+                              
+
+	} while (secim != 4);     
+}
+
+int kayit()
+{   
+	int otel;
+	printf("Bu secenegi secmek istediginizden emin misiniz? Eminseniz bir kez daha ayni tusu tuslayiniz.");
+	scanf("%d",&otel); fflush(stdin);
+	switch (otel)
+	{
+		case 1:
+			printf("\nTC kimlik numaranizi tuslayiniz:");
+			gets(temp2->tcNo1); fflush(stdin);   //Girilen char degerini alıp point edilen diziye atar. fflush fonksiyonunu ise enter tusuna bastiktan sonra deger alamama hatasini gidermek icin kullandik.
+			printf("\nAd-Soyadinizi giriniz:");
+			gets(temp2->adSoyad1); fflush(stdin);
+			printf("\nE-posta adresinizi giriniz:");
+			gets(temp2->email1); fflush(stdin);
+			break;
+			
+		case 2:
+			printf("\nTC kimlik numaranizi tuslayiniz:");
+			gets(temp4->tcNo2); fflush(stdin);   
+			printf("\nAd-Soyadinizi giriniz:");
+			gets(temp4->adSoyad2); fflush(stdin);
+			printf("\nE-posta adresinizi giriniz:");
+			gets(temp4->email2); fflush(stdin);
+			break;
+	}
+}
+
+int kayit();
+
+int rezervasyon(int x) 
+{
+	int otel1;
+	printf("Palandoken icin (1), Fethiye icin (2)'yi tuslayiniz.");
+	scanf("%d",&otel1);fflush(stdin);
+	if (otel1 == 1)
+	{
+	temp2 = temp1; 
+	if (temp1 == NULL) 
+
+	{
+		//Ilk kullanici icin kayit islemleri.
+		temp1 = temp2 = (struct palandoken*)malloc(sizeof(struct palandoken));     
+		kayit();
+		temp2->following1 = NULL;  
+		printf("\nRezervasyonunuz basariyla tamamlandi.");
+		printf("\nOda numaraniz: P-%d", x);
+		temp2->odaNo1 = x; 
+		return; 
+	}
+		else if (x > 15) // Odalar dolu ise;
+	{
+		printf("\nOdalarimiz doludur.");
+		return;
+	}
+		else
+		{                                     
+		// Sonraki kullanicilar icin.                 
+		while (temp2->following1)
+		temp2 = temp2->following1;
+		temp2->following1 = (struct palandoken *)malloc(sizeof(struct palandoken));
+		temp2 = temp2->following1;
+		kayit();
+		temp2->following1 = NULL;
+		printf("\nRezervasyonunuz basariyla tamamlandi.");
+		printf("\nOda numaraniz: P-%d", x);
+		temp2->odaNo1 = x;
+		return;
+		}
+	}
+	else 
+	{	
+	
+		temp4 = temp3; 
+		if (temp3 == NULL) {
+		// Ilk kullanici icin kayit islemleri
+		temp3 = temp4 = (struct fethiye*)malloc(sizeof(struct fethiye));     
+		kayit();
+		temp4->following2 = NULL;  
+		printf("\nRezervasyon basariyla tamamlandi.");
+		printf("\nOda numaraniz: F-%d", x);
+		temp4->odaNo2 = x; 
+		return; 
+	}
+	else if (x > 15) // Odalar doluysa
+	{
+		printf("\nOdalarimiz doludur.");
+		return;
+	}
+	else
+	{                                     
+		//Sonraki kullanicilar icin                  
+		while (temp4->following2)
+		temp4 = temp4->following2;
+		temp4->following2 = (struct fethiye *)malloc(sizeof(struct fethiye));
+		temp4 = temp4->following2;
+		kayit();
+		temp4->following2 = NULL;
+		printf("\nRezervasyon basariyla tamamlandi.");
+		printf("\nOda numaraniz: F-%d", x);
+		temp4->odaNo2 = x;
+		return;
+}
+}
+}
+
+int kayitGoster()      
+{
+	int otel2;
+	printf("Palandoken icin (1), Fethiye icin (2)'yi tuslayiniz.");
+	scanf("%d",&otel2);fflush(stdin);
+	if (otel2 == 1)
+	{
+		temp2 = temp1;
+	while (temp2)
+	{
+		printf("\n\n===========================================================");
+		printf("\n\tTC Kimlik Numarasi : %-6s", temp2->tcNo1);
+		printf("\n\tAd-Soyad : %-15s", temp2->adSoyad1);
+		printf("\n\tE-posta adresi: %-15s", temp2->email1);
+		printf("\n\tOda Numarasi: P-%d", temp2->odaNo1);
+		printf("\n===========================================================");
+		temp2 = temp2->following1;     
+	}
+	}
+	else 
+	temp4 = temp3;
+	while (temp3)
+	{
+		printf("\n\n===========================================================");
+		printf("\n\tTC Kimlik Numarasi : %-6s", temp4->tcNo2);
+		printf("\n\tAd-Soyad : %-15s", temp4->adSoyad2);
+		printf("\n\tE-posta adresi: %-15s", temp4->email2);
+		printf("\n\tOda Numarasi: F-%d", temp4->odaNo2);
+		printf("===========================================================");
+		temp4 = temp4->following2;     
+	}
+
+}
+
+int kayitIptal()
+{
+	int otel3;
+	printf("Palandoken icin (1), Fethiye icin (2)'yi tuslayiniz.");
+	scanf("%d",&otel3);fflush(stdin);
+	
+	if (otel3 == 1)
+	{
+		temp2 = temp1;     
+	system("cls");
+	char tcNo1[15];
+	printf("\nIptal ettirmek istediginiz rezervasyonu yapan kisinin TC Kimlik numarasi:"); fflush(stdin);
+	if (strcmp(temp1->tcNo1, tcNo1) == 0)
+	{
+		dummy1= temp1;
+		temp1 = temp1->following1;
+		free(dummy1);    
+		printf("Rezervasyonunuz iptal edilmiştir.");
+		Sleep(800);
+		return;
+	}
+	
+	while (temp2->following1)           
+	{
+		if (strcmp(temp2->following1->tcNo1, tcNo1) == 0)
+		{
+			dummy1 = temp2->following1;
+			temp2->following1 = temp2->following1->following1;
+			free(dummy1);	
+			printf("Rezervasyonunuz iptal edilmiştir.");
+			getch();
+			Sleep(800);
+			return;
+		}
+		temp2 = temp2->following1;
+	}
+	printf("Girmis oldugunuz TC Kimlik numarasi yanlistir. Lutfen tekrar kontrol ediniz.");
+	}
+
+	else 
+	temp4 = temp3;     
+	system("cls");
+	char tcNo2[15];
+	printf("\nIptal ettirmek istediginiz rezervasyonu yapan kisinin TC Kimlik numarasi:"); 
+	gets(tcNo2); fflush(stdin);
+	if (strcmp(temp3->tcNo2, tcNo2) == 0)
+	{
+		dummy2= temp3;
+		temp3 = temp3->following2;
+		free(dummy2);    
+		printf("Rezervasyonunuz iptal edilmiştir.");
+		Sleep(800);
+		return;
+	}
+
+	while (temp4->following2)           
+	{
+		if (strcmp(temp4->following2->tcNo2, tcNo2) == 0)
+		{
+			dummy2 = temp4->following2;
+			temp4->following2 = temp4->following2->following2;
+			free(dummy2);	
+			printf("Rezervasyonunuz iptal edilmiştir.");
+			getch();
+			Sleep(800);
+			return;
+		}
+		temp4 = temp4->following2;
+	}
+	printf("Girmis oldugunuz TC Kimlik numarasi yanlistir. Lutfen tekrar kontrol ediniz.");
+
+}
+
